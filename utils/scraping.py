@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import urllib
 import time
 
-WORD='ホシガラス'
+WORD='ホンドギツネ'
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
@@ -24,4 +24,4 @@ src = []
 for img in imgResults:
     src.append(img.get_attribute('src'))
 # Retrieve and download the images.
-for i in range(1000):    urllib.request.urlretrieve(str(src[i]),"sample_data/{}_{}.jpg".format(WORD, i))
+for i in range(1000):    urllib.request.urlretrieve(str(src[i]),"sample_data2/{}_{}.jpg".format(WORD, i))
