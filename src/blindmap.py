@@ -123,11 +123,33 @@ def calc_K(fov, w, h):
     ])
     return K
 
-def map_visualizer(cdata, blindmap, camera_range, scale=10):
+def create_feat(type, coordinates, device_id=None, type_id=None, class_id=None, timestamp=None):
+    if len(np.array(coordinates).shape) >= 2:
+        coordinates = [list(c) for c in coordinates]
+    feature_dict = {
+      "type": "Feature",
+      "geometry": {
+        "type": str(type),
+        "coordinates": list(coordinates)
+      },
+      "properties": {
+        "device_id": device_id,
+        "type_id": type_id,
+        "class_id": class_id,
+        "timestamp": timestamp,
+      }
+    }
+    return feature_dict
+
+def map_visualizer(cdata, blindmap, camera_range, scale=20):
+        feature_list = []
+
         fig, ax = plt.subplots()
         for k, v in cdata.items():
             pos = v["t"]
             plt.plot(pos[0], pos[1], '.', color="black", markersize=10)
+            feat = create_feat("Point", list(np.float_(pos)), device_id=k, type_id=0)
+            feature_list.append(feat)
 
         area = {}
         for k, v in blindmap.items():
@@ -136,7 +158,7 @@ def map_visualizer(cdata, blindmap, camera_range, scale=10):
             
             area_line = []
             for vctr in v:
-                vctr *= 20
+                vctr *= scale
                 plt.plot([pos[0], vctr[2]+pos[0]], [pos[1], vctr[0]+pos[1]], color="green", alpha=0.5)
                 area_line.append(np.array([[vctr[2]+pos[0], vctr[0]+pos[1]], [pos[0], pos[1]]]))
             area[k] = area_line
@@ -144,6 +166,8 @@ def map_visualizer(cdata, blindmap, camera_range, scale=10):
             geo = obj_vctr2polygon(pos, v)
             poly = patch.Polygon(geo[:, :2], fc='g', alpha=0.3)
             ax.add_patch(poly)
+            feat = create_feat("Polygon", list(np.float_(geo[:, :2])), device_id=k, type_id=1, class_id=cfg["class_id"], timestamp=cfg["T"])
+            feature_list.append(feat)
 
         area = list(area.values())
         if len(area) >=2:
@@ -153,21 +177,24 @@ def map_visualizer(cdata, blindmap, camera_range, scale=10):
             insec3 = intersection(area[0][1], area[1][0])
             insec_poly = np.array([
                 insec, insec1, insec2, insec3, insec])
-            insec_poly = patch.Polygon(insec_poly, fc='r', alpha=0.8)
-            ax.add_patch(insec_poly)
+            insec_poly_pth = patch.Polygon(insec_poly, fc='r', alpha=0.8)
+            ax.add_patch(insec_poly_pth)
+            feat = create_feat("Polygon", list(np.float_(insec_poly)), type_id=2, class_id=cfg["class_id"], timestamp=cfg["T"])
+            feature_list.append(feat)
         #intersection = intersection(area, )
 
         for k, v in camera_range.items():
             cfg = cdata[k]
             pos = cfg["t"]
             for vctr in v:
-                vctr *= 20
+                vctr *= scale
                 plt.plot([pos[0], vctr[2]+pos[0]], [pos[1], vctr[0]+pos[1]], ":", color="black")
 
         ax.set_xlim(-3, 13)
         ax.set_ylim(-3, 13)
         ax.set_aspect('equal')
         plt.show()
+        return feature_list
 
 def obj_vctr2polygon(pos, v):
     arr = [
@@ -204,7 +231,15 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--camera_pose')
     parser.add_argument('--od_result')
+    parser.add_argument('--geojson')
     args = parser.parse_args()
     
+    geojson = {"type": "FeatureCollection", "features": []}
     cdata, blindmap, camera_range = run(args.camera_pose, args.od_result)
-    map_visualizer(cdata, blindmap, camera_range)
+    feature_list = map_visualizer(cdata, blindmap, camera_range)
+    
+    geojson["features"] = feature_list
+    if args.geojson is not None:
+        f = open(args.geojson, "w")
+        json.dump(geojson, f, indent=2)
+        f.close()
