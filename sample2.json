@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "properties": {
+        "device_id": "sid-100A50500A2001008164012000000000",
+        "type_id": 0,
+        "class_id": null,
+        "timestamp": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.0,
+          0.0,
+          0.0
+        ]
+      },
+      "properties": {
+        "device_id": "sid-100A50500A2011085864012000000000",
+        "type_id": 0,
+        "class_id": null,
+        "timestamp": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            23.293134615353335,
+            4.991136632108562
+          ],
+          [
+            18.431666401053945,
+            9.852604846407955
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "properties": {
+        "device_id": "sid-100A50500A2001008164012000000000",
+        "type_id": 1,
+        "class_id": 0,
+        "timestamp": "20230621075334854"
+      }
+    }
+  ]
+}

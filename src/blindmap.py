@@ -6,7 +6,6 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import TABLEAU_COLORS as base_col
 from matplotlib.colors import CSS4_COLORS as css_col
 import matplotlib.patches as patch
-from descartes import PolygonPatch
 
 def read_camera_config(filename):
     data = json.load(open(filename))["config"]
