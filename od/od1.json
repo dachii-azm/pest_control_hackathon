@@ -1,0 +1,25 @@
+{
+    "DeviceID": "sid-100A50500A2001008164012000000000",
+    "ModelID": "0300000009730100",
+    "Image": true,
+    "Inferences": {
+        "inferenceResults": [
+            {
+                "C": 0,
+                "P": 0.515625,
+                "Left": 96,
+                "Top": 100,
+                "Right": 215,
+                "Bottom": 256
+            }
+        ],
+        "T": "20230621075334854"
+    },
+    "project_id": "00g5tvlv8edBSBRj5697",
+    "id": "a5862de9-b803-4bd8-b1ce-82e8678a484f",
+    "_rid": "csl7AMLbNw0CAAAAAAAAAA==",
+    "_self": "dbs/csl7AA==/colls/csl7AMLbNw0=/docs/csl7AMLbNw0CAAAAAAAAAA==/",
+    "_etag": "\"cf00eb34-0000-2300-0000-6492ac850000\"",
+    "_attachments": "attachments/",
+    "_ts": 1687334021
+}
